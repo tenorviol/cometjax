@@ -24,7 +24,8 @@ function cometStart(options) {
 	
 	// the timeout lets this not persist the browser's "page loading" state
 	setTimeout(function() {
-		request = $.ajax(options);
+		if (running)
+			request = $.ajax(options);
 	}, 100);
 	
 	// use this return object to stop the comet
@@ -33,6 +34,9 @@ function cometStart(options) {
 	}
 	
 	function ajaxSuccess(data, textStatus, XMLHttpRequest) {
+		if (!running)
+			return;
+		
 		// workaround for http://bugs.jquery.com/ticket/6060
 		if (!XMLHttpRequest.status)
 			return ajaxError(XMLHttpRequest, textStatus);
