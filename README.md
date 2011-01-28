@@ -1,6 +1,7 @@
 cometjax
 ========
 
+Project maintained on [github.com/tenorviol/cometjax](http://github.com/tenorviol/cometjax).
 Use it just like [jQuery.ajax](http://api.jquery.com/jQuery.ajax/), same options.
 
 	$(function() {
@@ -16,7 +17,8 @@ Use it just like [jQuery.ajax](http://api.jquery.com/jQuery.ajax/), same options
 		});
 	});
 
-This will poll the ajax query over and over again. Clicking the stop_comet button stops the incessant polling.
+This will poll the ajax query over and over again.
+Clicking the stop_comet button stops the incessant polling.
 
 Features
 --------
@@ -31,5 +33,7 @@ License
 -------
 
 Copyright 2011, Christopher Johnson
+
 Licensed under the MIT license.
+
 http://github.com/tenorviol/cometjax/license
