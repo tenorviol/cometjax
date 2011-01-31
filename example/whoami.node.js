@@ -5,7 +5,7 @@ var http = require('http'),
 var port = 8124;
 http.createServer(client).listen(port);
 
-console.log('whoami server running at '+port);
+console.log('whoami server running on port '+port);
 
 
 // clients are either here to say something or to listen
@@ -16,11 +16,11 @@ function client(request, result) {
 	var query = parse.query || {};
 	
 	if (query.say) {
-		result.end();
-		say(query);
+		result.end();  // finish with this client
+		say(query);    // then disceminate the say
 	} else {
 		if (query.callback) {
-			result.write(query.callback+"();");
+			result.write(query.callback+"();");  // jsonp callback
 		}
 		wait(result);
 	}
@@ -29,7 +29,8 @@ function client(request, result) {
 
 var listeners = [];
 
-// wait for someone to say something
+// throw this client in with the rest of the listeners,
+// waiting desperately for someone to say something
 function wait(result) {
 	var listener;
 	
@@ -50,12 +51,12 @@ function removeListener(listener) {
 	}
 }
 
-// to everyone listening, send a said response
+// to all listening, send said response
 function say(data) {
 	for (var i in listeners) {
 		var listener = listeners[i];
 		clearTimeout(listener.timeout);
-		listener.result.end("say("+JSON.stringify(data)+");");
+		listener.result.end("say("+JSON.stringify(data)+");");  // finally data gets back to a client!
 	}
 	listeners = [];
 }
