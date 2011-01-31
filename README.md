@@ -23,15 +23,13 @@ Clicking the stop_comet button stops the incessant polling.
 whoami example
 --------------
 
-whoami is a very rudimentary long-polling comet chat server that runs on node.js.
-
-To run the whoami example, download and install [node.js](http://nodejs.org/).
-The server should run without any additional libraries:
+whoami is a very rudimentary long-polling comet chat server that runs on 
+[node.js](http://nodejs.org/). To run the whoami example, download and
+install node.js. The server should run as is:
 
 	node example/whoami.node.js
 
-Then launch whomai.html into various browser windows. Pass your ip address to
-your friends and talk remotely.
+Then launch whoami.html into various browser windows, and start chattin'.
 
 Features
 --------
