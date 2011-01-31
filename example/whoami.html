@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Whoami client</title>
+</head>
+<body>
+
+<div>
+	<form>
+		<p>whoami: <input name="whoami" /></p>
+		<p><input type="submit" value="say"><input id="say" name="say" /></p>
+	</form>
+</div>
+
+<hr />
+
+<div id="transcript"></div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="../jquery.cometjax.js"></script>
+<script type="text/javascript">
+$(function() {
+	
+	var comet_server = "http://localhost:8124";
+	
+	$.cometjax({
+		url: comet_server,
+		dataType: "jsonp"
+	});
+	
+	$("form").submit(function() {
+		$.ajax({
+			url: comet_server,
+			data: $(this).serialize(),
+			success: function() {
+				$("#say").val("");
+			}
+		});
+		return false;
+	});
+	
+});
+
+function say(data) {
+	var p = $("<p></p>").text(data.say);
+	if (data.whoami) {
+		var b = $("<b></b>").text(data.whoami + ": ");
+		p.prepend(b);
+	}
+	$("#transcript").prepend(p);
+}
+</script>
+
+</body>
+</html>

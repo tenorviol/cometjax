@@ -15,14 +15,12 @@ function cometStart(options) {
 	var retry = 0;
 	var request;
 	
-	var onSuccess = options.success;
-	var onError = options.error;
+	var onComplete = options.complete;
+	options.complete = ajaxComplete;
 	
 	options.cache = options.cache || false;
-	options.error = ajaxError;
-	options.success = ajaxSuccess;
 	
-	// the timeout lets this not persist the browser's "page loading" state
+	// this timeout stops the browser's "page loading" spinning icon
 	setTimeout(function() {
 		if (running)
 			request = $.ajax(options);
@@ -33,36 +31,25 @@ function cometStart(options) {
 		stop: cometStop
 	}
 	
-	function ajaxSuccess(data, textStatus, XMLHttpRequest) {
+	function ajaxComplete(XMLHttpRequest, textStatus) {
 		if (!running)
 			return;
 		
-		// workaround for http://bugs.jquery.com/ticket/6060
-		if (!XMLHttpRequest.status)
-			return ajaxError(XMLHttpRequest, textStatus);
-		
 		// user callback
-		if (onSuccess)
-			onSuccess(data, textStatus, XMLHttpRequest);
+		if (onComplete)
+			onComplete(XMLHttpRequest, textStatus);
 		
 		// do it again!
-		retry = 0;
-		request = $.ajax(options);
-	}
-	
-	function ajaxError(XMLHttpRequest, textStatus, errorThrown) {
-		if (!running)
-			return;
-		
-		// user callback
-		if (onError)
-			onError(XMLHttpRequest, textStatus, errorThrown);
-		
-		// give it a second before retry
-		retry = Math.min(retry + 2000, 60000);
-		setTimeout(function() {
+		if (textStatus == "success") {
+			retry = 0;
 			request = $.ajax(options);
-		}, Math.random() * retry);
+		} else {
+			// error! give it some time before retry
+			retry = Math.min(retry + 2000, 60000);
+			setTimeout(function() {
+				request = $.ajax(options);
+			}, Math.random() * retry);
+		}
 	}
 	
 	function cometStop() {
